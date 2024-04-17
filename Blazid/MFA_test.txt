@@ -1,0 +1,52 @@
+aspnetcore/src/Identity/Extensions.Core/src
+
+GetAuthenticatorKeyStore()
+--
+
+UserManger(IUserStore<TUser>)
+
+--
+
+Blazid
+key=1
+Q9M53-D8QJ6
+QCYF7-VWP46
+5H63T-HYNKV
+9D7QM-FYNP6
+3B27F-J4CW7
+4659R-KMG2V
+YXB79-WC49P
+2WH6N-GC8C2
+WJWQB-56NQH
+3JW2J-RGQ6F
+----
+
+key=2
+
+Unable to resolve service for type 'Microsoft.AspNetCore.Identity.IUserStore`1[IdentityServer4.IdentityServerUser]' while attempting to activate 'Microsoft.AspNetCore.Identity.UserManager`1[IdentityServer4.IdentityServerUser]'.
+
+AddEntityFrameworkStores can only be called with a user that derives from IdentityUser<TKey>.
+
+public class IdentityDbContext<TUser> : IdentityDbContext<TUser, IdentityRole, string> where TUser : IdentityUser
+
+> Created an interface IIdentityServerUser (using the same contents as IdentityServerUser) and derived ApplicationUser class as:
+public class ApplicationUser : IdentityUser, IIdentityServerUser
+
+
+-- 
+> impl MFA separately
+> register app screen
+> store secret code per user
+	> auth 
+
+
+- 
+ValidateTwoFactorPIN():
+timeTolerance = 1 min
+
+shorten the secret key = 4 chars x6
+
+--
+
+37929 -  design review - sign off
+

@@ -1,0 +1,253 @@
+﻿@page "/Account/MultipleFormPage"
+@using System.ComponentModel.DataAnnotations
+
+@*     // ----------------------- Form A --------------------------------- *@
+
+
+<section name="form-a-sec" class="@showFormAcss">
+    <h3>Child Form A</h3>
+    <StatusMessage Message="@errorMessageA" />
+    <EditForm EditContext="editContextA" method="post" OnValidSubmit="LoginUserA" FormName="loginA">
+        @* EditContext="editContextA" Model="InputA" *@
+        @* @if (showFormA)
+        { *@
+            <DataAnnotationsValidator />
+            <h2>Use a local account to log in.</h2>
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="InputA.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label for="email" class="form-label">Email</label>
+                <ValidationMessage For="() => InputA.Email" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="InputA.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                <label for="password" class="form-label">Password</label>
+                <ValidationMessage For="() => InputA.Password" class="text-danger" />
+            </div>
+            <div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+            </div>
+        @* } *@
+    </EditForm>
+</section>
+@*     // ----------------------- Form B --------------------------------- *@
+
+<hr />
+
+<section name="form-b-sec" class="@showFormBcss">
+    <h3>Child Form B</h3>
+    <StatusMessage Message="@errorMessageB" />
+    <EditForm EditContext="editContextB" method="post" OnValidSubmit="LoginUserB" OnInvalidSubmit="LoginBInvalid" FormName="loginB">
+        @* EditContext="editContextB" Model=" InputB" *@
+        @* @if (showFormB)
+        {   *@        
+            <DataAnnotationsValidator />
+            <h2>Use a local account to log in.</h2>
+    
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="InputB.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label for="email" class="form-label">Email</label>
+                <ValidationMessage For="() => InputB.Email" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="InputB.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                <label for="password" class="form-label">Password</label>
+                <ValidationMessage For="() => InputB.Password" class="text-danger" />
+            </div>
+            <div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+            </div>
+        @* } *@
+    </EditForm>
+</section>
+
+<hr />
+
+@*     // ----------------------- Form C --------------------------------- *@
+
+
+<section name="form-c-sec" class="@showFormCcss">
+    <h3>Child Form C</h3>
+    <StatusMessage Message="@errorMessageC" />
+    <EditForm EditContext="editContextC" method="post" OnValidSubmit="LoginUserC" OnInvalidSubmit="LoginCInvalid" FormName="loginC">
+        @* EditContext="editContextC" Model="InputC" *@
+        @* @if (showFormC)
+        {   *@      
+            <DataAnnotationsValidator />
+            <h2>Use a local account to log in.</h2>
+            <hr />
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="InputC.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label for="email" class="form-label">Email</label>
+                <ValidationMessage For="() => InputC.Email" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="InputC.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                <label for="password" class="form-label">Password</label>
+                <ValidationMessage For="() => InputC.Password" class="text-danger" />
+            </div>
+            <div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+            </div>
+        @* } *@
+    </EditForm>
+</section>
+@code {
+
+    private string errorMessageA;
+    private string errorMessageB;
+    private string errorMessageC;
+
+    bool showFormA;
+    bool showFormB;
+    bool showFormC;
+
+    private string showFormAcss = "visible";
+    private string showFormBcss = "invisible";
+    private string showFormCcss = "invisible";
+
+    private EditContext editContextA = default!;
+    private EditContext editContextB = default!;
+    private EditContext editContextC = default!;
+
+    [SupplyParameterFromForm(FormName = "loginA")]
+    public InputModelA InputA { get; set; } = new();
+
+    [SupplyParameterFromForm(FormName = "loginB")]
+    public InputModelB InputB { get; set; } = new();
+
+    [SupplyParameterFromForm(FormName = "loginC")]
+    public InputModelC InputC { get; set; } = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        // --- Form A ----
+        InputA = InputA ?? new();
+        editContextA = new EditContext(InputA);
+        showFormA = true;
+
+        // --- Form B ----
+        InputB = InputB ?? new();
+        editContextB = new EditContext(InputB);
+        // showFormB = true;
+
+        // --- Form C ----
+        InputC = InputC ?? new();
+        editContextC = new EditContext(InputC);
+        // showFormC = true;
+    }
+
+
+    // ----------------------- Form A ---------------------------------
+
+    private async Task LoginUserA()
+    {
+        errorMessageA = "Form A: validated OK";
+        StateHasChanged();
+        //await Task.Delay(2000);
+        showFormA = false;
+        showFormB = true;
+        showFormC = false;
+
+        showFormAcss = "invisible";
+        showFormBcss = "visible";
+        showFormCcss = "invisible";
+
+        StateHasChanged();
+    }
+
+
+    async Task showForms()
+    {
+        await Task.Delay(2000);
+        showFormA = showFormC = false;
+        showFormB = true;
+    }
+
+    public sealed class InputModelA
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = "";
+
+    }
+
+    // ----------------------- Form B ---------------------------------
+
+    private async Task LoginUserB()
+    {
+        errorMessageB = "Form B: validated OK";
+        //await Task.Delay(2000);
+        showFormA = false;
+        showFormB = false;
+        showFormC = true;
+
+        showFormAcss = "invisible";
+        showFormBcss = "invisible";
+        showFormCcss = "visible";
+
+        StateHasChanged();
+    }
+
+    private async Task LoginBInvalid()
+    {
+        errorMessageB = "Form B ERROR";
+        editContextB?.NotifyValidationStateChanged();
+        StateHasChanged();
+    }
+
+    public sealed class InputModelB
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = "";
+
+    }
+
+    // ----------------------- Form C ---------------------------------
+
+    private async Task LoginUserC()
+    {
+        errorMessageC = "Form C: validated OK";
+        //await Task.Delay(2000);
+        showFormA = false;
+        showFormB = false;
+        showFormC = false;
+
+        showFormAcss = "invisible";
+        showFormBcss = "invisible";
+        showFormCcss = "invisible";
+
+        StateHasChanged();
+    }
+
+    private async Task LoginCInvalid()
+    {
+        errorMessageB = "Form C ERROR";
+    }
+
+    public sealed class InputModelC
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = "";
+
+    }
+}

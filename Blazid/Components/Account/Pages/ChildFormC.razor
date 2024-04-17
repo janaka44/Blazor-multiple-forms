@@ -1,0 +1,58 @@
+﻿@page "/Account/ChildForm-C"
+@using System.ComponentModel.DataAnnotations
+
+
+
+<hr />
+@* <button @onclick="movePrevC"> Move Prev</button>
+ *@<button @onclick="moveNextC"> Move Next</button>
+
+@code {
+    [Parameter]
+    public DynamicCompParent ParentPage { get; set; }
+
+    private EditContext editContextC = default!;
+
+    [SupplyParameterFromForm(FormName = "loginC")]
+    public InputModelC InputC { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (!ParentPage.pageLoadedC) { 
+            InputC = InputC ?? new();
+            editContextC = new EditContext(InputC);
+            var x = 1;
+        }
+        ParentPage.pageLoadedC = true;
+    }
+
+    private void moveNextC()
+    {
+        ParentPage.NavigateToLoginStep("Form-A");
+    }
+
+    private void movePrevC()
+    {
+        ParentPage.NavigateToLoginStep("Form-B");
+    }
+
+    private async Task LoginUserC()
+    {
+        moveNextC();
+    }
+
+    public sealed class InputModelC
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = "";
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
+    }
+}

@@ -1,0 +1,50 @@
+﻿@page "/Account/DynamicComp"
+
+<PageTitle>Login | Multi-Forms</PageTitle>
+
+<DynamicComponent Type="@currentLoginView" Parameters="pageParams" />
+
+@code {
+    public bool pageLoadedA;
+    public bool pageLoadedB;
+    public bool pageLoadedC;
+
+    private Type currentLoginView { get; set; }
+
+    private Dictionary<string, object?> pageParams;
+
+    protected override async Task OnInitializedAsync()
+    {    
+        NavigateToLoginStep("Form-A");   
+    }
+
+    public void NavigateToLoginStep(string step)
+    {
+        // Prepare parameters : common params
+        pageParams = new()
+            {
+                { "ParentPage", this },
+            };
+
+        switch (step)
+        {
+            case "Form-A":
+                currentLoginView = typeof(ChildFormB);
+                break;
+
+            case "Form-B":
+                currentLoginView = typeof(ChildFormB);
+                break;
+
+            case "Form-C":
+                currentLoginView = typeof(ChildFormC);
+                break;
+
+            default:
+                currentLoginView = typeof(ChildFormB);
+                break;
+        }
+        StateHasChanged();
+    }
+
+}
